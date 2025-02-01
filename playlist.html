@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Playlist</title>
+    <link rel="stylesheet" href="playlist.css">
+    <script src="playlist.js" defer></script>
+</head>
+<body>
+    <nav>
+        <div class="logo">TuneTogether</div>
+        <a href="homepage.html">Home</a>
+        <a href="homepage.html#search">Search</a>
+        <a href="playlist.html">Playlist</a>
+        <a href="#" class="signup-btn">Sign Up</a>
+    </nav>
+
+    <div class="container">
+        <div class="buttons" style="display: flex; flex-direction: column; gap: 20px;">
+            <button id="playlistBtn">Playlist Songs</button>
+            <button id="likedSongsBtn">Liked Songs</button>
+        </div>
+        
+        <div id="playlistContainer" class="song-list" style="display: none;"></div>
+        <button id="sharePlaylist" style="display: none;">Share Playlist</button>
+    </div>
+</body>
+</html>

@@ -1,0 +1,105 @@
+body {     
+    font-family: 'Arial', sans-serif;     
+    margin: 0;     
+    padding: 0;     
+    background-color: #121212;     
+    color: #e1dde4;     
+    display: flex; 
+}  
+
+nav {     
+    width: 250px;     
+    height: 100vh;     
+    padding: 20px;     
+    background-color: #1e1e1e;     
+    display: flex;     
+    flex-direction: column; 
+}  
+
+nav .logo {     
+    font-size: 24px;     
+    font-weight: bold;     
+    color: #fff; 
+}  
+
+nav a {     
+    color: #fff;     
+    text-decoration: none;     
+    margin: 10px 0;     
+    font-size: 18px;     
+    padding: 10px 15px;     
+    border-radius: 10px;     
+    transition: background-color 0.3s; 
+}  
+
+nav a:hover {     
+    background-color: #6A0DAD; 
+}  
+
+.container {     
+    flex-grow: 1;     
+    padding: 60px; 
+}  
+
+.buttons {     
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+}  
+
+button {     
+    width: 500px;  /* Full width of nav */
+    padding: 15px 20px;  /* Bigger button size */
+    font-size: 18px;
+    border: none;     
+    border-radius: 10px;     
+    cursor: pointer;     
+    background-color: #444;     
+    color: white;     
+    transition: background-color 0.3s, transform 0.3s; 
+}  
+
+button:hover {     
+    background-color: #6A0DAD;     
+    transform: scale(1.1); 
+}  
+
+.song-list {     
+    display: grid;     
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));     
+    gap: 15px; 
+}  
+
+.song-item {     
+    background-color: #282828;     
+    padding: 20px;     
+    border-radius: 15px;     
+    text-align: center;     
+    cursor: pointer;     
+    transition: transform 0.3s, background-color 0.3s; 
+}  
+
+.song-item:hover {     
+    transform: scale(1.1);     
+    background-color: #6A0DAD; 
+}  
+
+.heart {     
+    color: red; 
+}  
+
+#sharePlaylist {     
+    margin-top: 20px;     
+    padding: 15px 20px;     
+    font-size: 18px;     
+    background-color: #28a745;     
+    color: white;     
+    border: none;     
+    cursor: pointer;     
+    width: 25%;
+}  
+
+#sharePlaylist:hover {     
+    background-color: #218838;     
+    transform: scale(1.1); 
+}  
