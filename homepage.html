@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tune Together</title>
-    <!-- Link to your external CSS -->
+    <link rel="icon" href="cover_images/logo.webp">
     <link rel="stylesheet" href="homepage.css">
     <script src="homepage.js" defer></script>
     <!-- Include Font Awesome CDN for icons -->
@@ -12,11 +12,11 @@
 </head>
 <body>
     <nav>
-        <div class="logo">TuneTogether</div>
-        <a href="#">Home</a>
+        <div class="logo" style="color: violet;">TuneTogether</div>
+        <a href="homepage.html">Home</a>
         <a href="#">Search</a>
         <a href="#">Playlist</a>
-        <a href="#" class="signup-btn">Sign Up</a>
+        <a href="sign_in.html" class="signup-btn">Sign Up</a>
     </nav>
 
     <div class="container">
@@ -32,6 +32,26 @@
         <div class="section">
             <h2>Top Charts</h2>
             <div class="song-list" id="topChartsList"></div>
+        </div>
+    </div>
+    <div id="musicPlayer">
+        <img id="coverImage" src="cover_images/logo.webp" alt="Cover Image">
+        <div id="songInfo">
+            <p id="songTitle"><b>Select a song...</b></p>
+            <div class="controls">
+                <button id="prevBtn">┃◀</button>
+                <button id="playPauseBtn">▐▐ </button>
+                <button id="nextBtn">▶┃</button>
+            </div>
+            <input type="range" id="progressBar" value="0" step="1" style="flex-grow: 2;">
+            <span id="currentTime">0:00</span> / <span id="duration">0:00</span>
+        </div>
+        <div class="controls">
+            <p>📥</p>
+            <button id="downloadBtn">Download</button> <!-- Download button added -->
+            <p>🔊</p>
+            <input type="range" id="volumeControl" min="0" max="1" step="0.1" value="1">
+            <audio id="audioPlayer" controls style="display: none;"></audio>
         </div>
     </div>
 </body>
