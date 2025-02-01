@@ -170,3 +170,7 @@ button:hover {
     width:80%;
 }
 
+.liked {
+    color: red;
+}
+
