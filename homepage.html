@@ -6,6 +6,9 @@
     <title>Tune Together</title>
     <link rel="icon" href="cover_images/logo.webp">
     <link rel="stylesheet" href="homepage.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
     <script src="homepage.js" defer></script>
     <!-- Include Font Awesome CDN for icons -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
@@ -15,13 +18,52 @@
         <div class="logo" style="color: violet;">TuneTogether</div>
         <a href="homepage.html">Home</a>
         <a href="#">Search</a>
-        <a href="#">Playlist</a>
+        <a href="playlist.html">Playlist</a>
         <a href="sign_in.html" class="signup-btn">Sign Up</a>
     </nav>
 
     <div class="container">
-        <div class="search-bar">
+        <div class="body-nav">
+            <div class="search-bar">
             <input type="text" id="search" placeholder="Search for songs, artists, or albums...">
+        </div>
+        <div class="user-menu" id="user-avatar">
+            <img src="https://i.pravatar.cc/150?img=3" alt="User Avatar" class="avatar">
+        </div>
+        </div>
+        <div class="dropdown" id="dropdown">
+            <div class="user-info">
+                <img src="https://i.pravatar.cc/150?img=3" alt="User Avatar" class="dropdown-avatar">
+                <div class="text-center">
+                    <p class="user-name">
+                        John Doe 
+                        <i  id="pen" class="fa-solid fa-pen"></i>
+                    </p>
+                    <p class="user-email">john.doe@example.com</p>
+                </div>
+            </div>
+            
+            <hr>
+            <button class="menu-item" id="likedSong">
+                <i class="fas fa-heart"></i>Liked Songs
+            <a href="playlist.html"><button class="menu-item" id="playlist">
+                <i class="fas fa-music"></i> Playlist
+            </button></a>
+            
+
+            </button>
+            <button class="menu-item" id="addAcc">
+                <i class="fas fa-user-plus"></i> Add Another Account
+            </button>
+
+   
+
+            <button class="menu-item" id="Settings">
+                <i class="fas fa-cog"></i> Settings
+            </button>
+            <button class="menu-item logout" id="logout">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
         </div>
 
         <div class="section">
@@ -50,7 +92,7 @@
             <p>📥</p>
             <button id="downloadBtn">Download</button> <!-- Download button added -->
             <p>🔊</p>
-            <input type="range" id="volumeControl" min="0" max="1" step="0.1" value="1">
+            <input type="range" id="volumeControl" min="0" max="1" step="0.01" value="1">
             <audio id="audioPlayer" controls style="display: none;"></audio>
         </div>
     </div>

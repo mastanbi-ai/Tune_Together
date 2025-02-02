@@ -96,6 +96,66 @@ document.addEventListener("DOMContentLoaded", () => {
         coverImage.src = song.image;
         audioPlayer.play();
     }
+    document.getElementById('user-avatar').addEventListener('click', function() {
+        const dropdown = document.getElementById('dropdown');
+        dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+    });
+    
+    document.addEventListener('click', function(event) {
+        const dropdown = document.getElementById('dropdown');
+        const avatar = document.getElementById('user-avatar');
+    
+        if (!avatar.contains(event.target) && !dropdown.contains(event.target)) {
+            dropdown.style.display = 'none';
+        }
+    });
+    document.addEventListener("DOMContentLoaded", function () {
+        let userNameElement = document.getElementById("userName");
+        let penIcon = document.getElementById("pen");
+    
+        penIcon.addEventListener("click", function () {
+            let currentName = userNameElement.textContent.trim();
+            currentName = currentName.replace(/\s*$/, ""); // Remove any trailing spaces
+    
+            // Create an input field
+            let inputField = document.createElement("input");
+            inputField.type = "text";
+            inputField.value = currentName;
+            inputField.style.fontSize = "inherit";
+            inputField.style.border = "1px solid gray";
+            inputField.style.padding = "5px";
+            inputField.style.width = "150px";
+    
+            // Replace text with input field
+            userNameElement.innerHTML = "";
+            userNameElement.appendChild(inputField);
+            inputField.focus();
+    
+            // Handle enter key to update name
+            inputField.addEventListener("keydown", function (event) {
+                if (event.key === "Enter") {
+                    updateUserName(inputField.value);
+                }
+            });
+    
+            // If the user clicks outside, revert to the original name
+            inputField.addEventListener("blur", function () {
+                updateUserName(currentName);
+            });
+        });
+    
+        function updateUserName(newName) {
+            userNameElement.innerHTML = `${newName} <i id="pen" class="fa-solid fa-pen" style="cursor: pointer;"></i>`;
+            reattachEvent(); // Reattach the event to the new pen icon
+        }
+    
+        function reattachEvent() {
+            document.getElementById("pen").addEventListener("click", function () {
+                userNameElement.dispatchEvent(new Event("click"));
+            });
+        }
+    });
+    
 
     document.querySelectorAll(".song-item").forEach((songItem, index) => {
         songItem.addEventListener("click", function () {
