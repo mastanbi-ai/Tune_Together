@@ -1,5 +1,3 @@
-
-
 const searchInput = document.getElementById('search');
 const recommendedList = document.getElementById('recommendedList');
 const topChartsList = document.getElementById('topChartsList');
