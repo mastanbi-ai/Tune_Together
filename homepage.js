@@ -66,16 +66,80 @@ function getRandomSongs(count) {
     return shuffled.slice(0, count);
 }
 
+// <div class='like-button' data-src="${song.click}"></div>
+// <div class='add-button' data-src="${song.click}"><i class="fa-regular fa-circle-plus"></i>'like'</div>
+
+const icon = document.createElement("i");
+icon.className = "fa-solid fa-play";
+// document.body.appendChild(icon); // Append to desired element
+
+
+
 function renderSongs(containerId, songs) {
     const container = document.getElementById(containerId);
-    container.innerHTML = songs.map(song => `
-        <div class="song-item" data-src="${song.file}">
+    
+    container.innerHTML = songs.map((song, index) => `
+        <div class="song-item" data-src="${song.file}" data-index="${index}">
             <img src="${song.image}" alt="${song.title} Cover" onerror="this.onerror=null; this.src='cover_images/default.jpg';">
+            <i class="fa-solid fa-play play-btn" style='font-size:20px;margin:3px'></i>
+            <i class="fa-regular fa-heart like-btn" style='font-size:18px;margin:2px' 
+            id='liked'
+            
+            data-index="${index}"></i>
+            <i class="fa-solid fa-circle-plus add-btn" style='font-size:20px;margin:3px' data-index="${index}"></i>
             <p>${song.title} - ${song.singer} ${song.movie ? `(${song.movie})` : ""}</p>
         </div>
     `).join('');
-}
 
+// Add event listeners for like and add buttons
+document.querySelectorAll(".like-btn").forEach(btn => {
+    btn.addEventListener("click", function () {
+        const index = this.dataset.index;
+        this.classList.toggle("liked");
+
+        // Save liked songs to local storage
+        let likedSongs = JSON.parse(localStorage.getItem('likedSongs')) || [];
+        const songId = songs[index].title;
+
+        // If already liked, remove from local storage
+        if (this.classList.contains('liked')) {
+            // Add to liked songs if not already present
+            if (!likedSongs.includes(songId)) {
+                likedSongs.push(songId);
+                localStorage.setItem('likedSongs', JSON.stringify(likedSongs));
+                
+            }
+        } else {
+            // Remove from liked songs
+            likedSongs = likedSongs.filter(id => id !== songId);
+            localStorage.setItem('likedSongs', JSON.stringify(likedSongs));
+        }
+
+        // Log the liked song
+        console.log(`Liked: ${songs[index].title}`);
+    });
+});
+
+document.querySelectorAll(".add-btn").forEach(btn => {
+    btn.addEventListener("click", function () {
+        const index = this.dataset.index;
+        const songId = songs[index].title;
+
+        // Check if the song is already in the playlist
+        let playlist = JSON.parse(localStorage.getItem('playlist')) || [];
+        if (!playlist.includes(songId)) {
+            playlist.push(songId);
+            localStorage.setItem('playlist', JSON.stringify(playlist));
+            console.log(`Added to playlist: ${songId}`);
+            alert(`${songId} added to playlist!`);
+        } else {
+            alert(`${songId} is already in the playlist!`);
+        }
+    });
+});
+
+
+}
 document.addEventListener("DOMContentLoaded", () => {
     const audioPlayer = document.getElementById("audioPlayer");
     const songTitle = document.getElementById("songTitle");
@@ -245,3 +309,12 @@ downloadBtn.addEventListener("click", () => {
 const randomSongs = getRandomSongs(50);
 renderSongs('recommendedList', randomSongs.slice(0, 6));
 renderSongs('topChartsList', randomSongs.slice(6, 12));
+
+
+// Add functionality for like  buttons
+
+
+
+
+// Add functionality for addlist buttons
+

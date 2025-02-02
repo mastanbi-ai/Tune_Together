@@ -12,6 +12,7 @@
     <script src="homepage.js" defer></script>
     <!-- Include Font Awesome CDN for icons -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <script src="homepage.js" defer></script>
 </head>
 <body>
     <nav>
@@ -25,6 +26,7 @@
     <div class="container">
         <div class="body-nav">
             <div class="search-bar">
+            <i class="fa-solid fa-magnifying-glass"></i>
             <input type="text" id="search" placeholder="Search for songs, artists, or albums...">
         </div>
         <div class="user-menu" id="user-avatar">
@@ -76,23 +78,24 @@
             <div class="song-list" id="topChartsList"></div>
         </div>
     </div>
+
     <div id="musicPlayer">
         <img id="coverImage" src="cover_images/logo.webp" alt="Cover Image">
         <div id="songInfo">
             <p id="songTitle"><b>Select a song...</b></p>
             <div class="controls">
-                <button id="prevBtn">┃◀</button>
-                <button id="playPauseBtn">▐▐ </button>
-                <button id="nextBtn">▶┃</button>
+                <button id="prevBtn"><i class="fa-solid fa-backward"></i></button>
+                <button id="playPauseBtn"><i class="fa-solid fa-pause"></i></button>
+                <button id="nextBtn"><i class="fa-solid fa-forward"></i></button>
             </div>
             <input type="range" id="progressBar" value="0" step="1" style="flex-grow: 2;">
             <span id="currentTime">0:00</span> / <span id="duration">0:00</span>
         </div>
         <div class="controls">
-            <p>📥</p>
+            <p><i class="fa-solid fa-download"></i></p>
             <button id="downloadBtn">Download</button> <!-- Download button added -->
-            <p>🔊</p>
-            <input type="range" id="volumeControl" min="0" max="1" step="0.01" value="1">
+            <p><i class="fa-solid fa-volume-high"></i></p>
+            <input type="range" id="volumeControl" min="0" max="1" step="0.1" value="1">
             <audio id="audioPlayer" controls style="display: none;"></audio>
         </div>
     </div>

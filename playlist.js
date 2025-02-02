@@ -26,9 +26,10 @@ document.addEventListener('DOMContentLoaded', () => {
         songs.forEach(song => {
             const songItem = document.createElement('div');
             songItem.classList.add('song-item');
+            
             songItem.innerHTML = `
-                <span>${song.title} by ${song.artist}</span>
-                <div>${song.liked ? '❤️' : '♡'}</div>
+                <span class="song-title">${song.title} by ${song.artist}</span>
+                <span class="heart ${song.liked ? 'liked' : ''}">${song.liked ? '❤️' : '🤍'}</span>
             `;
             playlistContainer.appendChild(songItem);
         });

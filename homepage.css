@@ -166,18 +166,34 @@ hr {
 
 }
 
+/* .search-bar {
+    margin: 20px 0;
+} */
 .search-bar {
     margin: 20px 0;
+    display: flex;
+    align-items: center;
+    background-color: white;
+    border-radius: 25px;
+    padding: 5px 15px;
     width: 100%;
+    position: relative; /* Enables positioning of the icon inside */
 }
 
+.search-bar i {
+    position: absolute;
+    left: 15px; /* Adjust icon position */
+    color: gray;
+    font-size: 18px;
+}
 .search-bar input {
     width: 95%;
-    padding: 15px;
+    padding: 12px 15px 12px 40px; /* Adjust padding to prevent overlap with icon */
     font-size: 16px;
     border: none;
     border-radius: 25px;
     outline: none;
+    background: none;
     height: 15px;
     margin-top: 5px;
 }
@@ -298,5 +314,9 @@ input[type="range"]{
     margin: 0 8px; /* Add some margin for spacing */
     cursor: pointer; /* Change cursor to pointer */
     width:80%;
+}
+
+.liked {
+    color: red;
 }
 
