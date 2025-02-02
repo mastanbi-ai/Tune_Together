@@ -7,6 +7,7 @@ body {
     display: flex; 
 }  
 
+<<<<<<< HEAD
 nav {     
     width: 250px;     
     height: 150vh;     
@@ -15,26 +16,40 @@ nav {
     display: flex;     
     flex-direction: column; 
 }  
+=======
+nav {
+    width: 250px;
+    height: 100vh;
+    padding: 20px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: flex-start;
+    background-color: #1e1e1e;
+}
+>>>>>>> 4e693b1 (updated like and playlist features)
 
-nav .logo {     
-    font-size: 24px;     
-    font-weight: bold;     
-    color: #fff; 
-}  
+nav .logo {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #fff;
+}
 
-nav a {     
-    color: #fff;     
-    text-decoration: none;     
-    margin: 10px 0;     
-    font-size: 18px;     
-    padding: 10px 15px;     
-    border-radius: 10px;     
-    transition: background-color 0.3s; 
-}  
+nav a {
+    color: #fff;
+    text-decoration: none;
+    margin: 10px 0;
+    font-size: 18px;
+    padding: 10px 15px;
+    border-radius: 10px;
+    transition: background-color 0.3s;
+}
 
-nav a:hover {     
-    background-color: #6A0DAD; 
-}  
+nav a:hover {
+    background-color: #6A0DAD;
+}
 
 .container {     
     flex-grow: 1;     
@@ -100,5 +115,16 @@ button:hover {
     color: white;     
     border: none;     
     cursor: pointer;     
+<<<<<<< HEAD
     width: 250px;
 }
+=======
+    width: 25%;
+}  
+
+#sharePlaylist:hover {     
+    background-color: #218838;     
+    transform: scale(1.1); 
+} 
+ 
+>>>>>>> 4e693b1 (updated like and playlist features)
