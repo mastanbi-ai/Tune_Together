@@ -7,9 +7,10 @@ body {
     display: flex;
 }
 
+/* Ensure the navbar is fixed to the left side */
 nav {
     width: 250px;
-    height: 100vh;
+    height: 100vh; /* Full height */
     padding: 20px;
     box-sizing: border-box;
     display: flex;
@@ -18,15 +19,24 @@ nav {
     align-items: flex-start;
     background-color: #1e1e1e;
     position: relative ;
+    position: fixed; /* Fix the sidebar */
+    left: 0;
+    top: 0;
+    bottom: 0; /* Ensures full height */
+    z-index: 1000; /* Higher than most elements, but lower than the music player */
 }
 
-nav .logo {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 20px;
-    color: #fff;
+/* To prevent the body content from overlapping the navbar */
+body {
+    padding-left: 250px; /* Add padding to the left side to accommodate the navbar */
 }
 
+/* Optionally, ensure no scrolling for the navbar */
+body {
+    overflow-x: hidden; /* Prevent horizontal scroll */
+}
+
+/* Style the links within the nav */
 nav a {
     color: #fff;
     text-decoration: none;
@@ -58,7 +68,7 @@ nav a:hover {
     position: absolute;
     right: 50px;
     top: 60px;
-    background: white;
+    background: #121212;
     width: 280px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     border-radius: 12px;
@@ -86,7 +96,7 @@ nav a:hover {
     font-weight: bold;
     text-align: center;
     position: relative;
-    color: #121212;
+    color: #fff;
    
 }
 
@@ -123,7 +133,7 @@ nav a:hover {
     gap: 10px;
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     z-index: 2;
-    color: #121212;
+    color: #fff;
     
 }
 .dropdown a{
@@ -136,7 +146,7 @@ nav a:hover {
 
 .menu-item:hover {
     background-color: rgba(0, 0, 0, 0.05);
-    color: #121212;
+    color: violet;
 }
 
 /* Logout button in red */
@@ -221,6 +231,7 @@ hr {
     text-align: center;
     cursor: pointer;
     transition: transform 0.3s, background-color 0.3s;
+    border-bottom: 1px solid #444;
 }
 
 .song-item:hover {
@@ -247,19 +258,20 @@ nav a[href="homepage.html"] {
 
 /* Music Player Styling */
 #musicPlayer {
+    display: none;  /* Initially hidden */
     position: fixed;
     bottom: 0;
     left: 0;
-    width: 100%; /* Full width of the page */
+    width: 100%;
     background: #222;
     color: white;
-    padding: 15px 20px; /* Adjust padding */
+    padding: 15px;
     display: flex;
     align-items: center;
-    justify-content: space-between; /* Space between elements */
+    justify-content: space-between;
     box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
 }
-
 #coverImage {
     width: 100px;
     height: 80px;

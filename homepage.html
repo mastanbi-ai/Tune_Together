@@ -16,9 +16,9 @@
 </head>
 <body>
     <nav>
-        <div class="logo" style="color: violet;">TuneTogether</div>
+        <div class="logo" style="color: violet;"><h1>TuneTogether</h1></div>
         <a href="homepage.html">Home</a>
-        <a href="#">Search</a>
+        <a href="homepage.html#search">Search</a>
         <a href="playlist.html">Playlist</a>
         <a href="sign_in.html" class="signup-btn">Sign Up</a>
     </nav>
@@ -27,7 +27,9 @@
         <div class="body-nav">
             <div class="search-bar">
             <i class="fa-solid fa-magnifying-glass"></i>
-            <input type="text" id="search" placeholder="Search for songs, artists, or albums...">
+            <input type="text" id="search" placeholder="Search for songs, artists, or albums..." aria-label="Search">
+            <div id="allSongsList"></div>
+
         </div>
         <div class="user-menu" id="user-avatar">
             <img src="https://i.pravatar.cc/150?img=3" alt="User Avatar" class="avatar">
@@ -46,17 +48,18 @@
             </div>
             
             <hr>
+            <a href="playlist.html#likedSongsBtn"">
             <button class="menu-item" id="likedSong">
-                <i class="fas fa-heart"></i>Liked Songs
-            <a href="playlist.html"><button class="menu-item" id="playlist">
+                <i class="fas fa-heart"></i>Liked Songs</button></a>
+            <a href="playlist.html#playlistBtn"><button class="menu-item" id="playlist">
                 <i class="fas fa-music"></i> Playlist
             </button></a>
             
 
-            </button>
+            <a href="sign_in.html">
             <button class="menu-item" id="addAcc">
                 <i class="fas fa-user-plus"></i> Add Another Account
-            </button>
+            </button></a>
 
    
 
@@ -70,34 +73,41 @@
 
         <div class="section">
             <h2>Recommended for You</h2>
-            <div class="song-list" id="recommendedList"></div>
+            <div class="song-list" id="recommendedList" ></div>
         </div>
 
         <div class="section">
             <h2>Top Charts</h2>
             <div class="song-list" id="topChartsList"></div>
         </div>
+
+        <div class="section">
+            <h2>ALL SONGS</h2>
+            <div class="song-list" id="AllsongsList" ></div>
+        </div>
     </div>
 
-    <div id="musicPlayer">
-        <img id="coverImage" src="cover_images/logo.webp" alt="Cover Image">
-        <div id="songInfo">
-            <p id="songTitle"><b>Select a song...</b></p>
-            <div class="controls">
-                <button id="prevBtn"><i class="fa-solid fa-backward"></i></button>
-                <button id="playPauseBtn"><i class="fa-solid fa-pause"></i></button>
-                <button id="nextBtn"><i class="fa-solid fa-forward"></i></button>
+    <!-- Moved music player outside the main container -->
+    <footer>
+        <div id="musicPlayer" style="display: none;">
+            <img id="coverImage" src="cover_images/logo.webp" alt="Cover Image">
+            <div id="songInfo">
+                <p id="songTitle"><b>Select a song...</b></p>
+                <div class="controls">
+                    <button id="prevBtn"><i class="fa-solid fa-backward"></i></button>
+                    <button id="playPauseBtn"><i class="fa-solid fa-pause"></i></button>
+                    <button id="nextBtn"><i class="fa-solid fa-forward"></i></button>
+                </div>
+                <input type="range" id="progressBar" value="0" step="1" style="flex-grow: 2;">
+                <span id="currentTime">0:00</span> / <span id="duration">0:00</span>
             </div>
-            <input type="range" id="progressBar" value="0" step="1" style="flex-grow: 2;">
-            <span id="currentTime">0:00</span> / <span id="duration">0:00</span>
+            <div class="controls">
+                <button id="downloadBtn"><i class="fa-solid fa-download"></i> Download</button>
+                <p><i class="fa-solid fa-volume-high"></i></p>
+                <input type="range" id="volumeControl" min="0" max="1" step="0.1" value="1">
+                <audio id="audioPlayer" controls style="display: none;"></audio>
+            </div>
         </div>
-        <div class="controls">
-            <p><i class="fa-solid fa-download"></i></p>
-            <button id="downloadBtn">Download</button> <!-- Download button added -->
-            <p><i class="fa-solid fa-volume-high"></i></p>
-            <input type="range" id="volumeControl" min="0" max="1" step="0.1" value="1">
-            <audio id="audioPlayer" controls style="display: none;"></audio>
-        </div>
-    </div>
+    </footer>
 </body>
 </html>

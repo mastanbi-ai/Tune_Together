@@ -7,34 +7,48 @@ body {
     display: flex; 
 }  
 
-nav {     
-    width: 250px;     
-    height: 150vh;     
-    padding: 20px;     
-    background-color: #1e1e1e;     
-    display: flex;     
-    flex-direction: column; 
-}  
+nav {
+    width: 250px;
+    height: 100vh; /* Full height */
+    padding: 20px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: flex-start;
+    background-color: #1e1e1e;
+    position: relative ;
+    position: fixed; /* Fix the sidebar */
+    left: 0;
+    top: 0;
+    bottom: 0; /* Ensures full height */
+    z-index: 1000; /* Higher than most elements, but lower than the music player */
+}
 
-nav .logo {     
-    font-size: 24px;     
-    font-weight: bold;     
-    color: #fff; 
-}  
+/* To prevent the body content from overlapping the navbar */
+body {
+    padding-left: 250px; /* Add padding to the left side to accommodate the navbar */
+}
 
-nav a {     
-    color: #fff;     
-    text-decoration: none;     
-    margin: 10px 0;     
-    font-size: 18px;     
-    padding: 10px 15px;     
-    border-radius: 10px;     
-    transition: background-color 0.3s; 
-}  
+/* Optionally, ensure no scrolling for the navbar */
+body {
+    overflow-x: hidden; /* Prevent horizontal scroll */
+}
 
-nav a:hover {     
-    background-color: #6A0DAD; 
-}  
+/* Style the links within the nav */
+nav a {
+    color: #fff;
+    text-decoration: none;
+    margin: 10px 0;
+    font-size: 18px;
+    padding: 10px 15px;
+    border-radius: 10px;
+    transition: background-color 0.3s;
+}
+
+nav a:hover {
+    background-color: #6A0DAD;
+}
 
 .container {     
     flex-grow: 1;     
@@ -102,3 +116,10 @@ button:hover {
     cursor: pointer;     
     width: 250px;
 }
+
+
+#sharePlaylist:hover {     
+    background-color: #218838;     
+    transform: scale(1.1); 
+} 
+ 
