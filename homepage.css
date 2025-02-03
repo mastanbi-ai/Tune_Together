@@ -176,8 +176,9 @@ hr {
     background-color: white;
     border-radius: 25px;
     padding: 5px 15px;
-    width: 100%;
+    width: 91%;
     position: relative; /* Enables positioning of the icon inside */
+    height: 37px;
 }
 
 .search-bar i {
@@ -187,7 +188,7 @@ hr {
     font-size: 18px;
 }
 .search-bar input {
-    width: 95%;
+    width: 90%;
     padding: 12px 15px 12px 40px; /* Adjust padding to prevent overlap with icon */
     font-size: 16px;
     border: none;
