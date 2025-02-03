@@ -169,10 +169,63 @@ function addHandler(event) {
         alert(`${songId} removed from playlist!`);
     }
 }
+document.addEventListener("DOMContentLoaded", () => {
+    const addAccButton = document.getElementById("addAcc");
+    const signInModal = document.getElementById("signInModal");
+
+    addAccButton.addEventListener("click", () => {
+        signInModal.style.display = "flex";  // Show the modal
+    });
+
+    // Optional: Close modal when clicking outside the form
+    signInModal.addEventListener("click", (event) => {
+        if (event.target === signInModal) {
+            signInModal.style.display = "none";
+        }
+    });
+});
+
+document.querySelector(".sign-in-container form").addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    const email = document.querySelector(".sign-in-container input[type='email']").value;
+    const password = document.querySelector(".sign-in-container input[type='password']").value;
+
+    try {
+        const response = await fetch("http://localhost:5000/signin", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            // Save user name and email in localStorage if authenticated
+            const user = {
+                name: data.user.name,  // Assuming the API returns the user's name
+                email: data.user.email  // Assuming the API returns the user's email
+            };
+            document.querySelector(".user-name").innerText = data.user.name;
+            document.querySelector(".user-email").innerText = data.user.email;
+            localStorage.setItem("user", JSON.stringify(user)); // Save user data
+            console.log(user)
+
+            // Hide the sign-in container after successful sign-in
+            document.querySelector(".modal").style.display = "none";
+            
+            // Redirect to the homepage after successful sign-in (optional)
+            // window.location.href = "homepage.html"; // Replace with your homepage URL
+        } else {
+            alert(data.message); // Display error message if sign-in fails
+        }
+    } catch (error) {
+        console.error("Error during fetch:", error);
+        alert("There was an error processing your request. Please try again later.");
+    }
 
 
-
-
+});
 
 document.addEventListener("DOMContentLoaded", function () {
     const musicPlayer = document.getElementById("musicPlayer");
@@ -204,6 +257,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let currentSongIndex = 0; // Track the current song index
     
+    
 
     function loadSong(song) {
         audioPlayer.src = song.file;
@@ -211,67 +265,64 @@ document.addEventListener("DOMContentLoaded", () => {
         coverImage.src = song.image;
         audioPlayer.play();
     }
-    document.getElementById('user-avatar').addEventListener('click', function() {
-        const dropdown = document.getElementById('dropdown');
-        dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
-    });
-    
-    document.addEventListener('click', function(event) {
-        const dropdown = document.getElementById('dropdown');
-        const avatar = document.getElementById('user-avatar');
-    
-        if (!avatar.contains(event.target) && !dropdown.contains(event.target)) {
-            dropdown.style.display = 'none';
-        }
-    });
-    document.addEventListener("DOMContentLoaded", function () {
-        let userNameElement = document.getElementById("userName");
-        let penIcon = document.getElementById("pen");
-    
-        penIcon.addEventListener("click", function () {
-            let currentName = userNameElement.textContent.trim();
-            currentName = currentName.replace(/\s*$/, ""); // Remove any trailing spaces
-    
-            // Create an input field
-            let inputField = document.createElement("input");
-            inputField.type = "text";
-            inputField.value = currentName;
-            inputField.style.fontSize = "inherit";
-            inputField.style.border = "1px solid gray";
-            inputField.style.padding = "5px";
-            inputField.style.width = "150px";
-    
-            // Replace text with input field
-            userNameElement.innerHTML = "";
-            userNameElement.appendChild(inputField);
-            inputField.focus();
-    
-            // Handle enter key to update name
-            inputField.addEventListener("keydown", function (event) {
-                if (event.key === "Enter") {
-                    updateUserName(inputField.value);
-                }
-            });
-    
-            // If the user clicks outside, revert to the original name
-            inputField.addEventListener("blur", function () {
-                updateUserName(currentName);
-            });
-        });
-    
-        function updateUserName(newName) {
-            userNameElement.innerHTML = `${newName} <i id="pen" class="fa-solid fa-pen" style="cursor: pointer;"></i>`;
-            reattachEvent(); // Reattach the event to the new pen icon
-        }
-    
-        function reattachEvent() {
-            document.getElementById("pen").addEventListener("click", function () {
-                userNameElement.dispatchEvent(new Event("click"));
-            });
-        }
-    });
-    
+    // Function to decode the JWT token (to extract the user ID)
+function getUserIdFromToken(token) {
+    if (!token) return null;
 
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const decodedToken = JSON.parse(window.atob(base64));
+    return decodedToken.id;  // Return the user ID from the decoded token
+}
+
+// Fetch user details using the user ID from the token
+document.getElementById('user-avatar').addEventListener('click', function () {
+    const dropdown = document.getElementById('dropdown');
+    dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+
+    const token = localStorage.getItem('token');
+    console.log(token);  // Log the token to see if it's available
+  // Get the token from localStorage
+    const userId = getUserIdFromToken(token);     // Extract user ID from the token
+
+    if (userId) {
+        fetch(`http://localhost:5000/users/${userId}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,  // Pass the token in Authorization header
+            }
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(userData => {
+                console.log(userData); // Display the fetched user data
+                // Update the user details on the UI (assuming you have elements with .user-name and .user-email)
+                document.querySelector(".user-name").innerText = userData.name;
+                document.querySelector(".user-email").innerText = userData.email;
+            })
+            .catch(error => {
+                console.error("Error fetching user data:", error);
+            });
+    } else {
+        console.log("User is not logged in or no token available.");
+    }
+});
+
+// Close the dropdown if clicked outside
+document.addEventListener('click', function (event) {
+    const dropdown = document.getElementById('dropdown');
+    const avatar = document.getElementById('user-avatar');
+
+    if (!avatar.contains(event.target) && !dropdown.contains(event.target)) {
+        dropdown.style.display = 'none';
+    }
+});
+
+    
     document.querySelectorAll(".song-item").forEach((songItem, index) => {
         songItem.addEventListener("click", function () {
             // Remove highlight from all songs
