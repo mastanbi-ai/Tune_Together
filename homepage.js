@@ -127,12 +127,12 @@ function likeHandler(event) {
         likedSongs = likedSongs.filter(id => id !== songId);
         btn.classList.replace("fa-solid", "fa-regular"); // Change back to outline
         btn.style.color = ""; // Reset to default
-        alert(`${songId} Removed from Liked Songs!`);
+        
     } else {
         likedSongs.push(songId);
         btn.classList.replace("fa-regular", "fa-solid"); // Change to filled heart
         btn.style.color = "lightpink"; // Set heart color
-        alert(`${songId} added to Liked Songs!`);
+        
     }
 
     localStorage.setItem('likedSongs', JSON.stringify(likedSongs));
@@ -274,165 +274,111 @@ document.addEventListener("DOMContentLoaded", () => {
     const nextBtn = document.getElementById("nextBtn");
     const volumeControl = document.getElementById("volumeControl");
     const progressBar = document.getElementById("progressBar");
-    const currentTimeDisplay = document.getElementById("currentTime"); // Current time display
-    const durationDisplay = document.getElementById("duration"); // Duration display
-   
+    const currentTimeDisplay = document.getElementById("currentTime");
+    const durationDisplay = document.getElementById("duration");
+
     const playIcon = '<i class="fa-solid fa-play"></i>';
     const pauseIcon = '<i class="fa-solid fa-pause"></i>';
 
-    let currentSongIndex = 0; // Track the current song index
-    
-    
+    let currentSongIndex = null; // Track the current song index
 
     function loadSong(song) {
         audioPlayer.src = song.file;
         songTitle.textContent = song.title;
         coverImage.src = song.image;
         audioPlayer.play();
+        playPauseBtn.innerHTML = pauseIcon; // Set the main play/pause button to pause
     }
-    // Function to decode the JWT token (to extract the user ID)
-function getUserIdFromToken(token) {
-    if (!token) return null;
 
-    const base64Url = token.split('.')[1];
-    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-    const decodedToken = JSON.parse(window.atob(base64));
-    return decodedToken.id;  // Return the user ID from the decoded token
-}
-
-// Fetch user details using the user ID from the token
-document.getElementById('user-avatar').addEventListener('click', function () {
-    const dropdown = document.getElementById('dropdown');
-    dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
-
-    const token = localStorage.getItem('token');
-    console.log(token);  // Log the token to see if it's available
-  // Get the token from localStorage
-    const userId = getUserIdFromToken(token);     // Extract user ID from the token
-
-    if (userId) {
-        fetch(`http://localhost:5000/users/${userId}`, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`,  // Pass the token in Authorization header
+    function togglePlayPause(songItem, index) {
+        if (currentSongIndex === index && !audioPlayer.paused) {
+            audioPlayer.pause();
+            playPauseBtn.innerHTML = playIcon;
+            songItem.querySelector('.pause-btn').classList.replace('fa-pause', 'fa-play');
+        } else {
+            if (currentSongIndex !== index) {
+                currentSongIndex = index;
+                loadSong(songs[index]);
+            } else {
+                audioPlayer.play();
             }
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then(userData => {
-                console.log(userData); // Display the fetched user data
-                // Update the user details on the UI (assuming you have elements with .user-name and .user-email)
-                document.querySelector(".user-name").innerText = userData.name;
-                document.querySelector(".user-email").innerText = userData.email;
-            })
-            .catch(error => {
-                console.error("Error fetching user data:", error);
-            });
-    } else {
-        console.log("User is not logged in or no token available.");
+            playPauseBtn.innerHTML = pauseIcon;
+            songItem.querySelector('.pause-btn').classList.replace('fa-play', 'fa-pause');
+        }
     }
-});
 
-// Close the dropdown if clicked outside
-document.addEventListener('click', function (event) {
-    const dropdown = document.getElementById('dropdown');
-    const avatar = document.getElementById('user-avatar');
-
-    if (!avatar.contains(event.target) && !dropdown.contains(event.target)) {
-        dropdown.style.display = 'none';
-    }
-});
-
-    
     document.querySelectorAll(".song-item").forEach((songItem, index) => {
-        songItem.addEventListener("click", function () {
-            // Remove highlight from all songs
-            document.querySelectorAll(".song-item").forEach(item => {
-                item.style.backgroundColor = ""; // Reset background color
-            });
-    
-            currentSongIndex = index; // Update current song index
-            const songData = songs[index];
-            loadSong(songData);
-    
-            // Highlight the currently playing song
-            this.style.backgroundColor = "rgb(238, 130, 238)"; 
-            // Highlight color
-            
-            
+        songItem.addEventListener("click", function (event) {
+            if (!event.target.classList.contains('pause-btn')) {
+                togglePlayPause(songItem, index);
+            }
+        });
+
+        songItem.querySelector('.pause-btn').addEventListener('click', function (event) {
+            event.stopPropagation(); // Prevent triggering the song item click
+            togglePlayPause(songItem, index);
         });
     });
 
     playPauseBtn.addEventListener('click', () => {
         if (audioPlayer.paused) {
             audioPlayer.play();
-            playPauseBtn.innerHTML = pauseIcon;  // Change icon to pause
+            playPauseBtn.innerHTML = pauseIcon;
         } else {
             audioPlayer.pause();
-            playPauseBtn.innerHTML = playIcon;  // Change icon to play
+            playPauseBtn.innerHTML = playIcon;
         }
     });
 
     volumeControl.addEventListener("input", () => {
         audioPlayer.volume = volumeControl.value;
     });
+
     audioPlayer.addEventListener("timeupdate", () => {
         const progress = (audioPlayer.currentTime / audioPlayer.duration) * 100;
         progressBar.value = progress;
-
-        // Update current time display
         currentTimeDisplay.textContent = formatTime(audioPlayer.currentTime);
     });
 
-    // Update duration display when the song is loaded
     audioPlayer.addEventListener("loadedmetadata", () => {
         durationDisplay.textContent = formatTime(audioPlayer.duration);
     });
 
-    // Seek through the song when the progress bar is changed
     progressBar.addEventListener("input", () => {
         const seekTime = (progressBar.value / 100) * audioPlayer.duration;
         audioPlayer.currentTime = seekTime;
     });
 
-    // Automatically go to the next song when the current song ends
     audioPlayer.addEventListener("ended", () => {
-        nextBtn.click(); // Trigger the next button click
+        nextBtn.click();
     });
 
-    // Function to format time in minutes and seconds
     function formatTime(seconds) {
         const minutes = Math.floor(seconds / 60);
         const secs = Math.floor(seconds % 60);
-        return `${minutes}:${secs < 10 ? '0' : ''}${secs}`; // Format as mm:ss
+        return `${minutes}:${secs < 10 ? '0' : ''}${secs}`;
     }
 
-    // Add functionality for next and previous buttons
     nextBtn.addEventListener("click", () => {
-        currentSongIndex = (currentSongIndex + 1) % songs.length; // Loop back to the start
+        currentSongIndex = (currentSongIndex + 1) % songs.length;
         loadSong(songs[currentSongIndex]);
     });
 
     prevBtn.addEventListener("click", () => {
-        currentSongIndex = (currentSongIndex - 1 + songs.length) % songs.length; // Loop to the end
+        currentSongIndex = (currentSongIndex - 1 + songs.length) % songs.length;
         loadSong(songs[currentSongIndex]);
     });
-    const downloadBtn = document.getElementById("downloadBtn"); // Get the download button
 
-// Add event listener for the download button
-downloadBtn.addEventListener("click", () => {
-    const currentSong = songs[currentSongIndex]; // Get the currently playing song
-    const link = document.createElement("a"); // Create a temporary anchor element
-    link.href = currentSong.file; // Set the href to the song file
-    link.download = currentSong.title; // Set the download attribute to the song title
-    document.body.appendChild(link); // Append the link to the body
-    link.click(); // Programmatically click the link to trigger the download
-    document.body.removeChild(link); // Remove the link after downloading
-});
+    const downloadBtn = document.getElementById("downloadBtn");
+    downloadBtn.addEventListener("click", () => {
+        const currentSong = songs[currentSongIndex];
+        const link = document.createElement("a");
+        link.href = currentSong.file;
+        link.download = currentSong.title;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    });
 });
 
 // Initialize songs on page load
@@ -448,5 +394,15 @@ renderSongs("AllsongsList",randomSongs.slice(12,50),'all',12)
 
 
 // Add functionality for addlist buttons
+
+document.addEventListener('DOMContentLoaded', () => {
+    const songItems = document.querySelectorAll('.song-item');
+
+    songItems.forEach(item => {
+        item.addEventListener('click', () => {
+            item.classList.toggle('selected-song');
+        });
+    });
+});
 
 
