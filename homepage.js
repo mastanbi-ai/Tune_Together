@@ -121,21 +121,25 @@ function likeHandler(event) {
     const songIndex = parseInt(songIndexStr);
 
     let likedSongs = JSON.parse(localStorage.getItem('likedSongs')) || [];
-    const songId = randomSongs[songIndex].title;
+    const songId = songs[songIndex].title;
+
+    let message = ""; // Initialize message variable
 
     if (likedSongs.includes(songId)) {
         likedSongs = likedSongs.filter(id => id !== songId);
         btn.classList.replace("fa-solid", "fa-regular"); // Change back to outline
         btn.style.color = ""; // Reset to default
-        alert(`${songId} Removed from Liked Songs!`);
+        message = `"${songId}" removed from Liked songs`;
+
     } else {
         likedSongs.push(songId);
         btn.classList.replace("fa-regular", "fa-solid"); // Change to filled heart
         btn.style.color = "lightpink"; // Set heart color
-        alert(`${songId} added to Liked Songs!`);
+        message = `"${songId}" added to Liked songs`;
     }
 
     localStorage.setItem('likedSongs', JSON.stringify(likedSongs));
+    showNotification(message); // Show notification for liked songs
 }
 
 function addHandler(event) {
@@ -145,7 +149,7 @@ function addHandler(event) {
     const [section, songIndexStr] = indexString.split('-');
     const songIndex = parseInt(songIndexStr);
 
-    let songId = randomSongs[songIndex].title;
+    let songId = songs[songIndex].title;
     let playlist = JSON.parse(localStorage.getItem('playlist')) || [];
     let message = "";
 
@@ -230,7 +234,6 @@ document.querySelector(".sign-in-container form").addEventListener("submit", asy
 
 
 });
-
 
 
 function playHandler(event) {
@@ -448,4 +451,3 @@ renderSongs("AllsongsList",randomSongs.slice(12,50),'all',12)
 
 
 // Add functionality for addlist buttons
-

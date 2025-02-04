@@ -87,4 +87,34 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     sharePlaylist.addEventListener("click", () => alert("Playlist Shared!"));
+
+    // Add notification functionality for playlist
+    function showNotification(message) {
+        const notification = document.createElement("div");
+        notification.className = "custom-notification";
+        notification.innerText = message;
+        document.body.appendChild(notification);
+
+        setTimeout(() => {
+            notification.style.opacity = "0"; // Fade out
+            setTimeout(() => notification.remove(), 500); // Remove after fade out
+        }, 1500); // Display for 1.5 seconds
+    }
+
+    // Example of adding/removing songs from playlist with notifications
+    function addToPlaylist(songId) {
+        let playlist = JSON.parse(localStorage.getItem('playlist')) || [];
+        let message = "";
+
+        if (playlist.includes(songId)) {
+            playlist = playlist.filter(id => id !== songId);
+            message = `"${songId}" removed from Playlist`;
+        } else {
+            playlist.push(songId);
+            message = `"${songId}" added to Playlist`;
+        }
+
+        localStorage.setItem('playlist', JSON.stringify(playlist));
+        showNotification(message); // Show notification for playlist changes
+    }
 });
