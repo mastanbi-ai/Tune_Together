@@ -250,6 +250,22 @@ hr {
     margin: 10px 0 0;
     font-size: 16px;
 }
+.custom-notification {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-image: linear-gradient(to right,rgb(177, 10, 177),rgb(226, 47, 226));
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    opacity: 1;
+    transition: opacity 0.5s ease-in-out;
+    z-index: 1000;
+}
+
 
 nav a[href="homepage.html"] {
     color: violet;
