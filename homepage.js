@@ -94,6 +94,11 @@ function renderSongs(containerId, songs, sectionPrefix, startIndex) {
             </div>
         `;
     }).join('');
+    document.querySelectorAll(".pause-btn").forEach(btn => {
+        btn.removeEventListener('click', playHandler);  
+        btn.addEventListener('click', playHandler);
+    });
+    
 
     // Add event listeners for like and add buttons
     document.querySelectorAll(".like-btn").forEach(btn => {
@@ -111,63 +116,62 @@ function renderSongs(containerId, songs, sectionPrefix, startIndex) {
 
 function likeHandler(event) {
     const btn = event.target;
-    const indexString = btn.dataset.index; // "rec-0" or "top-6"
+    const indexString = btn.dataset.index;
     const [section, songIndexStr] = indexString.split('-');
-    const songIndex = parseInt(songIndexStr); // Convert string to number
+    const songIndex = parseInt(songIndexStr);
 
     let likedSongs = JSON.parse(localStorage.getItem('likedSongs')) || [];
-    const songId = randomSongs[songIndex].title; // Use `songs[]` correctly
+    const songId = randomSongs[songIndex].title;
 
-    // If the song is already liked, remove it from the liked list
     if (likedSongs.includes(songId)) {
         likedSongs = likedSongs.filter(id => id !== songId);
-        localStorage.setItem('likedSongs', JSON.stringify(likedSongs));
-        btn.classList.remove("liked"); // Remove liked class
-        console.log(`Removed from liked: ${songId}`);
-        alert(`${songId} Removed from Likedsongs!`);
+        btn.classList.replace("fa-solid", "fa-regular"); // Change back to outline
+        btn.style.color = ""; // Reset to default
+        alert(`${songId} Removed from Liked Songs!`);
     } else {
-        // If the song is not liked, add it to the liked list
         likedSongs.push(songId);
-        localStorage.setItem('likedSongs', JSON.stringify(likedSongs));
-        btn.classList.add("liked"); // Add liked class
-        console.log(`Liked: ${songId}`);
-        alert(`${songId} added to Likedsongs!`);
+        btn.classList.replace("fa-regular", "fa-solid"); // Change to filled heart
+        btn.style.color = "lightpink"; // Set heart color
+        alert(`${songId} added to Liked Songs!`);
     }
+
+    localStorage.setItem('likedSongs', JSON.stringify(likedSongs));
 }
+
 function addHandler(event) {
+    event.stopPropagation(); // Prevent triggering playHandler
     const btn = event.target;
-    const indexString = btn.dataset.index; // "rec-0" or "top-6"
+    const indexString = btn.dataset.index;
     const [section, songIndexStr] = indexString.split('-');
-    const songIndex = parseInt(songIndexStr); // Convert to number
+    const songIndex = parseInt(songIndexStr);
 
-    let songId;
-    if (section === 'rec') {
-        songId = randomSongs[songIndex].title;
-    } else if (section === 'top') {
-        songId = randomSongs[songIndex].title;
-    } else if (section === 'all') {
-        songId = randomSongs[songIndex].title;
-    } 
-
-    // Retrieve playlist from localStorage
+    let songId = randomSongs[songIndex].title;
     let playlist = JSON.parse(localStorage.getItem('playlist')) || [];
+    let message = "";
 
-    // Check if song is already in the playlist
-    const songIndexInPlaylist = playlist.indexOf(songId);
-
-    if (songIndexInPlaylist === -1) {
-        // Song is not in the playlist, so add it
-        playlist.push(songId);
-        localStorage.setItem('playlist', JSON.stringify(playlist));
-        console.log(`Added to playlist: ${songId}`);
-        alert(`${songId} added to playlist!`);
+    if (playlist.includes(songId)) {
+        playlist = playlist.filter(id => id !== songId);
+        btn.classList.replace("fa-circle-minus", "fa-circle-plus"); // Change to plus icon
+        message = `"${songId}" removed from Playlist`;
     } else {
-        // Song is already in the playlist, so remove it
-        playlist.splice(songIndexInPlaylist, 1);
-        localStorage.setItem('playlist', JSON.stringify(playlist));
-        console.log(`Removed from playlist: ${songId}`);
-        alert(`${songId} removed from playlist!`);
+        playlist.push(songId);
+        btn.classList.replace("fa-circle-plus", "fa-circle-minus"); // Change to minus icon
+        message = `"${songId}" added to Playlist`;
     }
+
+    localStorage.setItem('playlist', JSON.stringify(playlist));
+    showNotification(message);
+}
+function showNotification(message) {
+    const notification = document.createElement("div");
+    notification.className = "custom-notification";
+    notification.innerText = message;
+    document.body.appendChild(notification);
+
+    setTimeout(() => {
+        notification.style.opacity = "0"; // Fade out
+        setTimeout(() => notification.remove(), 500); // Remove after fade out
+    }, 1500); // Display for 1.5 seconds
 }
 document.addEventListener("DOMContentLoaded", () => {
     const addAccButton = document.getElementById("addAcc");
@@ -226,6 +230,27 @@ document.querySelector(".sign-in-container form").addEventListener("submit", asy
 
 
 });
+
+
+
+function playHandler(event) {
+    const btn = event.target;
+    const isPlaying = btn.classList.contains("fa-pause");
+
+    // Pause all other songs
+    document.querySelectorAll(".pause-btn").forEach(icon => {
+        icon.classList.remove("fa-pause");
+        icon.classList.add("fa-play");
+    });
+
+    if (isPlaying) {
+        btn.classList.remove("fa-pause");
+        btn.classList.add("fa-play");
+    } else {
+        btn.classList.remove("fa-play");
+        btn.classList.add("fa-pause");
+    }
+}
 
 document.addEventListener("DOMContentLoaded", function () {
     const musicPlayer = document.getElementById("musicPlayer");
@@ -337,6 +362,7 @@ document.addEventListener('click', function (event) {
             // Highlight the currently playing song
             this.style.backgroundColor = "rgb(238, 130, 238)"; 
             // Highlight color
+            
             
         });
     });
