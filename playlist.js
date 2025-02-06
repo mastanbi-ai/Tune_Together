@@ -77,6 +77,30 @@ document.addEventListener("DOMContentLoaded", () => {
     function resetButtonStyles() {
         [playlistBtn, likedSongsBtn].forEach(btn => btn.style.backgroundColor = "");
     }
+    let playlist = [];
+
+    // Button to add songs to playlist
+    const playlistButton = document.getElementById("playlistButton");
+    const shareButton = document.getElementById("sharePlaylist");
+    
+
+    
+    shareButton.addEventListener("click", function () {
+        // Encode the playlist as a URL parameter
+        let playlistData = encodeURIComponent(JSON.stringify(playlist));
+    
+        // Create a shareable link (Replace 'playlist.html' with your actual page)
+        let shareableLink = `${window.location.origin}/playlist.html?data=${playlistData}`;
+    
+        // Copy link to clipboard and alert the user
+        navigator.clipboard.writeText(shareableLink).then(() => {
+            alert("Playlist link copied! Share it with friends.");
+        });
+    
+        console.log("Shareable link:", shareableLink);
+    });
+    
+
 
     // Event listeners for Playlist & Liked Songs
     playlistBtn.addEventListener("click", () => {
