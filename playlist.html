@@ -14,19 +14,42 @@
         <div class="logo" style="color: violet;"><h1>Tune Together</h1></div>
         <a href="homepage.html"><i class="fa-solid fa-house" style="padding: 5px;"></i>Home</a>
         <a href="homepage.html#search"><i class="fa-solid fa-magnifying-glass" style="padding: 5px;"></i></i>Search</a>
-        <a href="playlist.html" style="color: violet;"><i class="fa-solid fa-list" style="padding: 5px; "></i></i>Library</a>
+        <a href="playlist.html" style="color: violet;"><i class="fa-solid fa-list" style="padding: 5px;"></i></i>Library</a>
         <a href="sign_in.html" class="signup-btn"><i class="fa-regular fa-circle-user" style="padding: 5px;"></i></i>Sign Up</a>
     </nav>
+    
 
     <div class="container">
-        <div class="buttons" style="display: flex; flex-direction: column; gap: 20px;">
-            <button id="playlistBtn">Playlist Songs</button>
-            <button id="likedSongsBtn">Liked Songs</button>
-        </div>
-        
-        
+
+        <div class="buttons" style="display: flex; flex-direction: row; gap: 20px;">
+            <button id="playlistBtn" style="color: whitesmoke;">Playlist Songs</button>
+            <button id="likedSongsBtn" style="color: whitesmoke;">Liked Songs</button>
+        </div>       
         <div id="playlistContainer" class="song-list" style="display: none;"></div>
-        <button id="sharePlaylist" style="display: none;">Share Playlist</button>
-    </div>
+        <button id="sharePlaylist" style="display: none;">Share Playlist</button> 
+    </div> 
+    <footer>
+        <div id="musicPlayer" style="display: none;">
+            <img id="coverImage" src="cover_images/logo.webp" alt="Cover Image">
+            <div id="songInfo">
+                <p id="songTitle"><b>Select a song...</b></p>
+                <div class="controls">
+                    <button id="prevBtn"><i class="fa-solid fa-backward"></i></button>
+                    <button id="playPauseBtn"><i class="fa-solid fa-pause"></i></button>
+                    <button id="nextBtn"><i class="fa-solid fa-forward"></i></button>
+                </div>
+                <input type="range" id="progressBar" value="0" step="1" style="flex-grow: 2;">
+                <span id="currentTime">0:00</span> / <span id="duration">0:00</span>
+            </div>
+            <div class="controls">
+                <div class="inner" style="display: flex;margin:40px;justify-content:left;">
+                <button id="downloadBtn"><i class="fa-solid fa-download" style="margin-left: 8px"> </i> Download</button><br>
+                <i class="fa-solid fa-volume-high" style="margin-top:15px;margin-left: 8px;"></i>
+                <input type="range" id="volumeControl" min="0" max="1" step="0.1" value="1">
+                <audio id="audioPlayer" controls style="display: none;"></audio>
+                <div>
+            </div>
+        </div>
+    </footer>
 </body>
 </html>

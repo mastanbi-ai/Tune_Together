@@ -4,7 +4,20 @@ document.addEventListener("DOMContentLoaded", () => {
     const playlistContainer = document.getElementById("playlistContainer");
     const sharePlaylist = document.getElementById("sharePlaylist");
 
-    // Existing playlist songs
+    const musicPlayer = document.getElementById("musicPlayer");
+    const audioPlayer = new Audio();
+    const songTitle = document.getElementById("songTitle");
+    const coverImage = document.getElementById("coverImage");
+    const playPauseBtn = document.getElementById("playPauseBtn");
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const volumeControl = document.getElementById("volumeControl");
+    const progressBar = document.getElementById("progressBar");
+    const currentTimeDisplay = document.getElementById("currentTime");
+    const durationDisplay = document.getElementById("duration");
+
+    let currentSongIndex = null;
+    let currentSongData = null;
     const allSongs = [
         { title: "Naatu Naatu", singer: "Rahul Sipligunj, Kaala Bhairava", movie: "RRR", file:"songs/naatunaatu.mp3",image:"cover_images/natunatu.jpeg" },
         { title: "Inkem Inkem", singer: "Sid Sriram", movie: "Geetha Govindam",file:"songs/inkem.mp3",image:"cover_images/geetha-govindam-2018.webp"},
@@ -49,107 +62,147 @@ document.addEventListener("DOMContentLoaded", () => {
         { title: "Chamka Chamka", singer: "Ranjith,Geetha madhuri", movie: "Chirutha",file:"songs/chamk.mp3",image:"cover_images/chamk.jpg"},
         { title: "Hoyna Hoyna", singer: "Anirudh Ravichandhran", movie: "Gang Leader",file:"songs/hoy.mp3",image:"cover_images/hoy.jpeg"}
     ];
-    
-    // Retrieve liked songs from localStorage
-    function getLikedSongsFromStorage() {
-        const likedTitles = JSON.parse(localStorage.getItem("likedSongs")) || [];
-        return allSongs.filter(song => likedTitles.includes(song.title));
+    function loadSong(song) {
+        currentSongData = song; // Store the current song data
+        audioPlayer.src = song.file;
+        songTitle.textContent = song.title;
+        coverImage.src = song.image;
+        audioPlayer.play();
+        musicPlayer.style.display = "flex"; // Show the footer player
+        updatePlayPauseIcon(true); // Set to play icon
+        updateSongItemPlayButton(currentSongIndex, true); // Update play button style
     }
+
+    function updatePlayPauseIcon(isPlaying) {
+        playPauseBtn.innerHTML = isPlaying
+            ? '<i class="fa-solid fa-pause"></i>'
+            : '<i class="fa-solid fa-play"></i>';
+    }
+
+    function updateSongItemPlayButton(index, isPlaying) {
+        const songItems = document.querySelectorAll(".song-item");
+        const playButton = songItems[index].querySelector('.play-button');
+        playButton.innerHTML = isPlaying ? '<i class="fa-solid fa-pause"></i>' : '<i class="fa-solid fa-play"></i>';
+    }
+
+    function resetButtonStyles() {
+        [playlistBtn, likedSongsBtn].forEach(btn => btn.style.backgroundColor = "");
+    }
+
     function getPlaylistSongsFromStorage() {
         const playlistTitles = JSON.parse(localStorage.getItem("playlist")) || [];
         return allSongs.filter(song => playlistTitles.includes(song.title));
     }
 
+    function getLikedSongsFromStorage() {
+        const likedTitles = JSON.parse(localStorage.getItem("likedSongs")) || [];
+        return allSongs.filter(song => likedTitles.includes(song.title));
+    }
+
     function renderSongs(songs, showShare) {
         playlistContainer.innerHTML = "";
-        playlistContainer.style.display = "block";
+        playlistContainer.style.display = "flex";
+        playlistContainer.style.flexWrap = "wrap";
 
-        songs.forEach(song => {
+        songs.forEach((song, index) => {
             const songItem = document.createElement("div");
             songItem.classList.add("song-item");
 
             songItem.innerHTML = `
-                <span class="song-title">${song.title} by ${song.singer}</span>
-                <span class="heart liked">❤️</span>
+                <img src="${song.image}" alt="${song.title}" class="song-image">
+                <div class="song-info">
+                    <i class="fa-solid fa-play play-button" data-file="${song.file}" style='font-size:20px;margin:4px;cursor:pointer'></i>
+                    <span class="song-title">${song.title} by ${song.singer}</span>
+                </div>
             `;
+
+            songItem.querySelector(".play-button").addEventListener("click", () => {
+                if (currentSongIndex === index) {
+                    if (audioPlayer.paused) {
+                        audioPlayer.play();
+                        updatePlayPauseIcon(true);
+                    } else {
+                        audioPlayer.pause();
+                        updatePlayPauseIcon(false);
+                    }
+                } else {
+                    if (currentSongIndex !== null) {
+                        updateSongItemPlayButton(currentSongIndex, false);
+                    }
+                    loadSong(song);
+                    currentSongIndex = index;
+                    updateSongItemPlayButton(index, true);
+                }
+            });
+
             playlistContainer.appendChild(songItem);
         });
 
         sharePlaylist.style.display = showShare ? "block" : "none";
     }
-    function resetButtonStyles() {
-        [playlistBtn, likedSongsBtn].forEach(btn => btn.style.backgroundColor = "");
-    }
-    let playlist = [];
 
-    // Button to add songs to playlist
-    const playlistButton = document.getElementById("playlistButton");
-    const shareButton = document.getElementById("sharePlaylist");
-    
-
-    
-    shareButton.addEventListener("click", function () {
-        // Encode the playlist as a URL parameter
-        let playlistData = encodeURIComponent(JSON.stringify(playlist));
-    
-        // Create a shareable link (Replace 'playlist.html' with your actual page)
-        let shareableLink = `${window.location.origin}/playlist.html?data=${playlistData}`;
-    
-        // Copy link to clipboard and alert the user
-        navigator.clipboard.writeText(shareableLink).then(() => {
-            alert("Playlist link copied! Share it with friends.");
-        });
-    
-        console.log("Shareable link:", shareableLink);
-    });
-    
-
-
-    // Event listeners for Playlist & Liked Songs
     playlistBtn.addEventListener("click", () => {
         resetButtonStyles();
-        const playlistSongs = getPlaylistSongsFromStorage();
         playlistBtn.style.backgroundColor = "#6A0DAD";
-        renderSongs(playlistSongs, true);
+        renderSongs(getPlaylistSongsFromStorage(), true);
     });
 
     likedSongsBtn.addEventListener("click", () => {
         resetButtonStyles();
-        const likedSongs = getLikedSongsFromStorage();
         likedSongsBtn.style.backgroundColor = "#6A0DAD";
-        renderSongs(likedSongs, false);
+        renderSongs(getLikedSongsFromStorage(), false);
     });
 
-    sharePlaylist.addEventListener("click", () => alert("Playlist Shared!"));
-
-    // Add notification functionality for playlist
-    function showNotification(message) {
-        const notification = document.createElement("div");
-        notification.className = "custom-notification";
-        notification.innerText = message;
-        document.body.appendChild(notification);
-
-        setTimeout(() => {
-            notification.style.opacity = "0"; // Fade out
-            setTimeout(() => notification.remove(), 500); // Remove after fade out
-        }, 1500); // Display for 1.5 seconds
-    }
-
-    // Example of adding/removing songs from playlist with notifications
-    function addToPlaylist(songId) {
-        let playlist = JSON.parse(localStorage.getItem('playlist')) || [];
-        let message = "";
-
-        if (playlist.includes(songId)) {
-            playlist = playlist.filter(id => id !== songId);
-            message = `"${songId}" removed from Playlist`;
+    // Footer controls
+    playPauseBtn.addEventListener('click', () => {
+        if (audioPlayer.paused) {
+            audioPlayer.play();
+            updatePlayPauseIcon(true);
         } else {
-            playlist.push(songId);
-            message = `"${songId}" added to Playlist`;
+            audioPlayer.pause();
+            updatePlayPauseIcon(false);
         }
+    });
 
-        localStorage.setItem('playlist', JSON.stringify(playlist));
-        showNotification(message); // Show notification for playlist changes
+    nextBtn.addEventListener("click", () => {
+        if (currentSongIndex !== null) {
+            currentSongIndex = (currentSongIndex + 1) % allSongs.length;
+            loadSong(allSongs[currentSongIndex]);
+        }
+    });
+
+    prevBtn.addEventListener("click", () => {
+        if (currentSongIndex !== null) {
+            currentSongIndex = (currentSongIndex - 1 + allSongs.length) % allSongs.length;
+            loadSong(allSongs[currentSongIndex]);
+        }
+    });
+
+    volumeControl.addEventListener("input", () => {
+        audioPlayer.volume = volumeControl.value;
+    });
+
+    audioPlayer.addEventListener("timeupdate", () => {
+        const progress = (audioPlayer.currentTime / audioPlayer.duration) * 100;
+        progressBar.value = progress;
+        currentTimeDisplay.textContent = formatTime(audioPlayer.currentTime);
+    });
+
+    audioPlayer.addEventListener("loadedmetadata", () => {
+        durationDisplay.textContent = formatTime(audioPlayer.duration);
+    });
+
+    progressBar.addEventListener("input", () => {
+        const seekTime = (progressBar.value / 100) * audioPlayer.duration;
+        audioPlayer.currentTime = seekTime;
+    });
+
+    function formatTime(seconds) {
+        const minutes = Math.floor(seconds / 60);
+        const secs = Math.floor(seconds % 60);
+        return `${minutes}:${secs < 10 ? '0' : ''}${secs}`;
     }
-    
+
+    // Initial render of songs
+    renderSongs(getPlaylistSongsFromStorage(), true);
 });
