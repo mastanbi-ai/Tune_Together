@@ -124,4 +124,5 @@ document.addEventListener("DOMContentLoaded", () => {
         localStorage.setItem('playlist', JSON.stringify(playlist));
         showNotification(message); // Show notification for playlist changes
     }
+    
 });

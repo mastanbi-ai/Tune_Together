@@ -85,7 +85,7 @@ function renderSongs(containerId, songs, sectionPrefix, startIndex) {
         return `
             <div class="song-item" data-src="${song.file}" data-index="${sectionPrefix}-${uniqueIndex}">
                 <img src="${song.image}" alt="${song.title} Cover" onerror="this.onerror=null; this.src='cover_images/logo.jpg';">
-                <i class="fa-solid fa-play pause-btn" style='font-size:20px;margin:3px'></i>
+                <i class="fa-solid fa-play play-btn" style='font-size:20px;margin:3px'></i>
                 <i class="fa-regular fa-heart like-btn" style='font-size:18px;margin:2px' 
                 id='liked'
                 data-index="${sectionPrefix}-${uniqueIndex}"></i>
@@ -413,12 +413,18 @@ document.addEventListener('click', function (event) {
     playPauseBtn.addEventListener('click', () => {
         if (audioPlayer.paused) {
             audioPlayer.play();
-            playPauseBtn.innerHTML = pauseIcon;  // Change icon to pause
+            // Change icon to pause
         } else {
             audioPlayer.pause();
-            playPauseBtn.innerHTML = playIcon;  // Change icon to play
+              // Change icon to play
         }
+        updatePlayPauseIcon();
     });
+    function updatePlayPauseIcon() {
+        playPauseBtn.innerHTML = audioPlayer.paused
+            ? `<i class="fa-solid fa-play"></i>`
+            : `<i class="fa-solid fa-pause"></i>`;
+    }
 
     volumeControl.addEventListener("input", () => {
         audioPlayer.volume = volumeControl.value;
