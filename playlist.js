@@ -5,10 +5,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const sharePlaylist = document.getElementById("sharePlaylist");
 
     // Existing playlist songs
-    const songs = [
+    const allSongs = [
         { title: "Naatu Naatu", singer: "Rahul Sipligunj, Kaala Bhairava", movie: "RRR", file:"songs/naatunaatu.mp3",image:"cover_images/natunatu.jpeg" },
         { title: "Inkem Inkem", singer: "Sid Sriram", movie: "Geetha Govindam",file:"songs/inkem.mp3",image:"cover_images/geetha-govindam-2018.webp"},
-        { title: "Samajavaragamana", singer: "Sid Sriram", movie: "Ala Vaikunthapurramuloo",file:"songs/samaja.mp3",image:"cover_images/ala-vaikunthapurramuloo-2020.webp"},
+        { title: "Samajavaragamna", singer: "Sid Sriram", movie: "Ala Vaikuntapuramulo",file:"songs/samaja.mp3",image:"cover_images/ala-vaikunthapurramuloo-2020.webp"},
         { title: "Why This Kolaveri Di", singer: "Dhanush", movie: "3", file:"songs/why.mp3 ",image:"cover_images/3.jpg"},
         { title: "Rowdy Baby", singer: "Dhanush, Dhee", movie: "Maari 2",file:"songs/rowdy.mp3",image:"cover_images/rowdy.jpg" },
         { title: "Tum Hi Ho", singer: "Arijit Singh", movie: "Aashiqui 2",file:"songs/tum.mp3",image:"cover_images/ashqui2.jpg" },
@@ -44,8 +44,12 @@ document.addEventListener("DOMContentLoaded", () => {
         { title: "NaaNaa Hyrana", singer: "Thaman s", movie: "Game Changer",file:"songs/naanaa.mp3",image:"cover_images/naa.jpeg"},
         { title: "Chuttamalle", singer: "Shilpa Rao", movie: "Devara-01",file:"songs/Chuttamalle.mp3",image:"cover_images/chuttamalle.jpeg" },
         { title: "Hey Rangule'", singer: "G.V. prakash", movie: "Amaran",file:"songs/hey.mp3" ,image:"cover_images/hey.jpeg"},
-        { title: "Bujji Thalli", singer: "DSP", movie: "Thandel",file:"songs/bujji.mp3",image:"cover_images/bujji.jpeg"}
+        { title: "Bujji Thalli", singer: "DSP", movie: "Thandel",file:"songs/bujji.mp3",image:"cover_images/bujji.jpeg"},
+        { title: "Yemito", singer: "Haricharan", movie: "Andhala Rakshasi",file:"songs/andhala.mp3",image:"cover_images/andhala.jpeg"},
+        { title: "Chamka Chamka", singer: "Ranjith,Geetha madhuri", movie: "Chirutha",file:"songs/chamk.mp3",image:"cover_images/chamk.jpg"},
+        { title: "Hoyna Hoyna", singer: "Anirudh Ravichandhran", movie: "Gang Leader",file:"songs/hoy.mp3",image:"cover_images/hoy.jpeg"}
     ];
+    
     // Retrieve liked songs from localStorage
     function getLikedSongsFromStorage() {
         const likedTitles = JSON.parse(localStorage.getItem("likedSongs")) || [];
