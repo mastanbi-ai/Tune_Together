@@ -74,15 +74,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
         sharePlaylist.style.display = showShare ? "block" : "none";
     }
+    function resetButtonStyles() {
+        [playlistBtn, likedSongsBtn].forEach(btn => btn.style.backgroundColor = "");
+    }
 
     // Event listeners for Playlist & Liked Songs
     playlistBtn.addEventListener("click", () => {
+        resetButtonStyles();
         const playlistSongs = getPlaylistSongsFromStorage();
+        playlistBtn.style.backgroundColor = "#6A0DAD";
         renderSongs(playlistSongs, true);
     });
 
     likedSongsBtn.addEventListener("click", () => {
+        resetButtonStyles();
         const likedSongs = getLikedSongsFromStorage();
+        likedSongsBtn.style.backgroundColor = "#6A0DAD";
         renderSongs(likedSongs, false);
     });
 
