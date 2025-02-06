@@ -79,14 +79,17 @@ icon.className = "fa-solid fa-play";
 
 function renderSongs(containerId, songs, sectionPrefix, startIndex) {
     const container = document.getElementById(containerId);
-
+    
     container.innerHTML = songs.map((song, index) => {
         const uniqueIndex = startIndex + index; // Calculate the correct index for each section
+        let likedSongs = JSON.parse(localStorage.getItem('likedSongs')) || [];
+        const isLiked = likedSongs.includes(song.title); // Check if the song is liked
+
         return `
             <div class="song-item" data-src="${song.file}" data-index="${sectionPrefix}-${uniqueIndex}">
                 <img src="${song.image}" alt="${song.title} Cover" onerror="this.onerror=null; this.src='cover_images/logo.jpg';">
                 <i class="fa-solid fa-play play-btn" style='font-size:20px;margin:3px'></i>
-                <i class="fa-regular fa-heart like-btn" style='font-size:18px;margin:2px' 
+                <i class="fa-regular fa-heart like-btn ${isLiked ? 'liked' : ''}" style='font-size:18px;margin:2px' 
                 id='liked'
                 data-index="${sectionPrefix}-${uniqueIndex}"></i>
                 <i class="fa-solid fa-circle-plus add-btn" style='font-size:20px;margin:3px' data-index="${sectionPrefix}-${uniqueIndex}"></i>
@@ -94,25 +97,24 @@ function renderSongs(containerId, songs, sectionPrefix, startIndex) {
             </div>
         `;
     }).join('');
+
+    // Add event listeners
     document.querySelectorAll(".pause-btn").forEach(btn => {
         btn.removeEventListener('click', playHandler);  
         btn.addEventListener('click', playHandler);
     });
-    
 
-    // Add event listeners for like and add buttons
     document.querySelectorAll(".like-btn").forEach(btn => {
-        // Prevent adding multiple listeners
-        btn.removeEventListener('click', likeHandler);  // Remove any previous listener
+        btn.removeEventListener('click', likeHandler);  
         btn.addEventListener('click', likeHandler);
     });
 
     document.querySelectorAll(".add-btn").forEach(btn => {
-        // Prevent adding multiple listeners
-        btn.removeEventListener('click', addHandler);  // Remove any previous listener
+        btn.removeEventListener('click', addHandler);  
         btn.addEventListener('click', addHandler);
     });
 }
+
 
 function likeHandler(event) {
     const btn = event.target;
@@ -125,22 +127,31 @@ function likeHandler(event) {
 
     let message = ""; // Initialize message variable
 
+    // Check if the song is already liked
     if (likedSongs.includes(songId)) {
+        // Remove from liked songs
         likedSongs = likedSongs.filter(id => id !== songId);
-        btn.classList.replace("fa-solid", "fa-regular"); // Change back to outline
-        btn.style.backgroundColor = ""; // Reset to default
         message = `"${songId}" removed from Liked songs`;
-
     } else {
+        // Add to liked songs
         likedSongs.push(songId);
-        btn.classList.replace("fa-regular", "fa-solid"); // Change to filled heart
-        
         message = `"${songId}" added to Liked songs`;
     }
 
+    // Save updated liked songs to localStorage
     localStorage.setItem('likedSongs', JSON.stringify(likedSongs));
-    showNotification(message); // Show notification for liked songs
+
+    // Dynamically update the 'liked' class for the button
+    if (likedSongs.includes(songId)) {
+        btn.classList.add("liked"); // Add the liked class
+    } else {
+        btn.classList.remove("liked"); // Remove the liked class
+    }
+
+    // Show notification for liked songs
+    showNotification(message);
 }
+
 
 function addHandler(event) {
     event.stopPropagation(); // Prevent triggering playHandler

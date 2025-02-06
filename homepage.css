@@ -335,7 +335,6 @@ input[type="range"]{
     height: 5px;
 }
 
-
 .selected-song {
     background-color: rgb(238, 130, 238);
 }
@@ -344,10 +343,9 @@ input[type="range"]{
     cursor: pointer; /* Change cursor to pointer */
     width:75%;
 }
-
 .liked {
-    color: red;
-}
+    color: rgb(204, 64, 162);
+} 
 .modal {
     display: none;  /* Initially hidden */
     position: fixed;
