@@ -140,6 +140,130 @@ document.addEventListener("DOMContentLoaded", () => {
 
         sharePlaylist.style.display = showShare ? "block" : "none";
     }
+    let playlist = []; // for further manipulation if needed
+
+  sharePlaylist.addEventListener("click", function () {
+    let playlistData = encodeURIComponent(JSON.stringify(playlist));
+    let shareableLink = `${window.location.origin}/playlist.html?data=${playlistData}`;
+    showShareModal(shareableLink);
+  });
+
+  function showShareModal(link) {
+    let modalOverlay = document.createElement("div");
+    modalOverlay.style.position = "fixed";
+    modalOverlay.style.top = "0";
+    modalOverlay.style.left = "0";
+    modalOverlay.style.width = "100%";
+    modalOverlay.style.height = "100%";
+    modalOverlay.style.backgroundColor = "rgba(0, 0, 0, 0.8)";
+    modalOverlay.style.display = "flex";
+    modalOverlay.style.justifyContent = "center";
+    modalOverlay.style.alignItems = "center";
+    modalOverlay.style.zIndex = "1000";
+
+    let modalContainer = document.createElement("div");
+    modalContainer.style.backgroundColor = "#2c2c2c";
+    modalContainer.style.padding = "20px";
+    modalContainer.style.borderRadius = "8px";
+    modalContainer.style.textAlign = "center";
+    modalContainer.style.position = "relative";
+    modalContainer.style.color = "#fff";
+    modalContainer.style.maxWidth = "90%";
+    modalContainer.style.width = "400px";
+
+    let closeButton = document.createElement("span");
+    closeButton.innerHTML = "&times;";
+    closeButton.style.position = "absolute";
+    closeButton.style.top = "10px";
+    closeButton.style.right = "15px";
+    closeButton.style.fontSize = "24px";
+    closeButton.style.cursor = "pointer";
+    closeButton.style.color = "#fff";
+    closeButton.addEventListener("click", function () {
+      document.body.removeChild(modalOverlay);
+    });
+    modalContainer.appendChild(closeButton);
+
+    let title = document.createElement("h3");
+    title.textContent = "Share Your Playlist";
+    title.style.marginTop = "10px";
+    modalContainer.appendChild(title);
+
+    let iconContainer = document.createElement("div");
+    iconContainer.style.display = "flex";
+    iconContainer.style.justifyContent = "center";
+    iconContainer.style.alignItems = "center";
+    iconContainer.style.gap = "20px";
+    iconContainer.style.marginTop = "20px";
+
+    const shareOptions = [
+      {
+        name: "WhatsApp",
+        link: 'whatsapp://send?text=${encodeURIComponent(link)}',
+        icon: "https://cdn-icons-png.flaticon.com/512/124/124034.png",
+      },
+      {
+        name: "Facebook",
+        link: 'https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(link)}',
+        icon: "https://cdn-icons-png.flaticon.com/512/733/733547.png",
+      },
+      {
+        name: "Twitter",
+        link: 'https://twitter.com/intent/tweet?url=${encodeURIComponent(link)}',
+        icon: "https://cdn-icons-png.flaticon.com/512/733/733579.png",
+      },
+      {
+        name: "Instagram",
+        link: 'https://www.instagram.com/',
+        icon: "https://cdn-icons-png.flaticon.com/512/733/733558.png",
+      },
+      {
+        name: "Telegram",
+        link: 'https://t.me/share/url?url=${encodeURIComponent(link)}',
+        icon: "https://cdn-icons-png.flaticon.com/512/2111/2111646.png",
+      },
+      {
+        name: "LinkedIn",
+        link: 'https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(link)}',
+        icon: "https://cdn-icons-png.flaticon.com/512/174/174857.png",
+      },
+      {
+        name: "Copy",
+        link: "javascript:void(0)",
+        icon: "https://cdn-icons-png.flaticon.com/512/60/60525.png",
+      },
+    ];
+
+    shareOptions.forEach((option) => {
+      let a = document.createElement("a");
+      if (option.name !== "Copy") {
+        a.href = option.link;
+        a.target = "_blank";
+      }
+      let img = document.createElement("img");
+      img.src = option.icon;
+      img.alt = option.name;
+      img.style.width = "40px";
+      img.style.height = "40px";
+      img.style.cursor = "pointer";
+      a.appendChild(img);
+
+      if (option.name === "Copy") {
+        a.addEventListener("click", function () {
+          navigator.clipboard.writeText(link).then(() => {
+            alert("Link copied to clipboard!");
+          });
+        });
+      }
+      iconContainer.appendChild(a);
+    });
+
+    modalContainer.appendChild(iconContainer);
+    modalOverlay.appendChild(modalContainer);
+    document.body.appendChild(modalOverlay);
+  }
+
+
 
     playlistBtn.addEventListener("click", () => {
         resetButtonStyles();
