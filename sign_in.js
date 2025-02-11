@@ -33,7 +33,7 @@ document.querySelector(".sign-up-container form").addEventListener("submit", asy
         if (response.ok) {
             alert(data.message);
             alert("Press 'User Menu' on the home page and sign in there.");
-            window.location.href = "homepage.html";
+            window.location.href = "index.html";
         } else {
             alert(data.error || "Sign-up failed. Please try again.");
         }
